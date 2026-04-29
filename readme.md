@@ -7,3 +7,5 @@
  2. `npm install `
  3. `node index.js` 
  4. Follow the prompts in the app.
+
+<img width="851" height="720" alt="{4CEBCDBD-C17E-435D-AEA8-F53526F1BA63}" src="https://github.com/user-attachments/assets/13f75a8a-9270-4d4b-9265-72e1b063fb15" />
