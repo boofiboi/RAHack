@@ -1,4 +1,5 @@
 <h1><center>RetroAchievements utility to manage your achievements.</center></h1>
+<h1 style="color:red;"><center><b><i>YOUR SITE RANK WILL GET UNTRACKED IF YOU USE THIS!</i></b></center></h1>
 <h3>I do not take responsibility for misuse of this app, if you get banned off of RA for using this, its your fault!</h3>
 <h4>Command line utility to manage achievements on RA</h4>
 <h3>Usage:</h5>
