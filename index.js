@@ -125,7 +125,7 @@ async function GetGameData(gameid){
 function dothingy(gameinfo){
     console.log(clc.cyan("1. Give all achievements for game (Risky)"))
     console.log(clc.cyan("2. Give specific achievement based on ID"))
-    console.log(clc.cyan("3. Give all achievements sequentially (Takes time, safest option)"))
+    console.log(clc.cyan("3. Give all achievements sequentially with a delay (DOESNT WORK FOR SOME REASON)"))
     console.log(clc.cyan("4. Search through achievements"))
     rl.question("What do you want to do?" + clc.red(" (Q to quit): "), answer =>{
         if(answer.toLowerCase() == "q"){
@@ -163,7 +163,61 @@ function dothingy(gameinfo){
                             }
                         console.log(clc.greenBright("All achievements awarded!"))
                         dothingy(gameinfo)
-                    })();}})}})}
+                    })();}})}
+        if(answer == 2){
+            console.clear()
+            const askId = () => {
+                rl.question(clc.yellow("Enter achievement ID you want to get (or B to go back): "), async ans=>{
+                    if(!ans) return askId()
+                    if(ans.toLowerCase() === "b") return dothingy(gameinfo)
+                    const id = Number(ans)
+                    if(Number.isNaN(id)){
+                        console.clear()
+                        console.error(clc.redBright("An ID cannot be anything else than a number!"))
+                        return askId()
+                    }
+                    await givecheevo(id)
+                    return askId()
+                })
+            }
+            askId()
+        }
+        if(answer == 3){
+            console.clear()
+            rl.question(clc.yellow("This option will give you every achievement for a game sequentially with a delay of 1 minute\nto prevent 2 achievements from sharing the same unlock time\n\nIt stops at the last achievement to prevent RA from displaying a done mastery\n"+ clc.red("THE CONSOLE WILL HANG FOR 1 MINUTE BEFORE IT STARTS!\n") + clc.cyan("Proceed? Yes/No\n")),answer=>{
+                let lowercaseanswer = answer.toLowerCase()
+                switch(lowercaseanswer){
+                    case "no":
+                        return dothingy(gameinfo)
+                    case "yes":
+                        console.clear()
+                        console.log("proceeding")
+                        const list = Array.isArray(gameinfo.achievements) ? gameinfo.achievements : Object.values(gameinfo.achievements);
+                        if (!gameinfo || list.length === 0) {
+                            console.log(clc.redBright("No achievements found for this game."));
+                            return dothingy(gameinfo)
+                        }
+                        if(gameinfo.numAwardedToUser >= gameinfo.numAchievements){
+                            console.clear()
+                            console.error(clc.red("You already have all achievements for this game!"))
+                            return dothingy(gameinfo)
+                        }
+                        (async () => {
+                            for (const ach of list) {
+                                const id = ach.id ?? ach.achievementId ?? ach.index ?? "unknown";
+                                await givecheevo(id);
+                                await new Promise(r => setTimeout(r, 60000));
+                            }
+                        console.log(clc.greenBright("All achievements awarded!"))
+                        dothingy(gameinfo)
+                    })
+                    
+                }
+                
+            })
+        }
+            })
+        }
 
 GameSelect()
 
